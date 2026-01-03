@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class PageTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return PageTranslation::with('page')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = PageTranslation::create($request->only(['page_id','locale','title','content']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PageTranslation $pageTranslation)
+    public function update(Request $request,$id)
     {
-        //
+        $translation = PageTranslation::findOrFail($id);
+        $translation->update($request->only(['title','content']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PageTranslation $pageTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PageTranslation $pageTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PageTranslation $pageTranslation)
-    {
-        //
+        PageTranslation::destroy($id);
+        return response()->json(['message'=>'Page translation deleted']);
     }
 }

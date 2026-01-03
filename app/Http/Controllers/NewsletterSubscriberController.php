@@ -7,59 +7,20 @@ use Illuminate\Http\Request;
 
 class NewsletterSubscriberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return NewsletterSubscriber::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $subscriber = NewsletterSubscriber::create($request->only(['email','accepted_privacy']));
+        return response()->json($subscriber,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(NewsletterSubscriber $newsletterSubscriber)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(NewsletterSubscriber $newsletterSubscriber)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, NewsletterSubscriber $newsletterSubscriber)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(NewsletterSubscriber $newsletterSubscriber)
-    {
-        //
+        NewsletterSubscriber::destroy($id);
+        return response()->json(['message'=>'Subscriber deleted']);
     }
 }

@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class MenuItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return MenuItem::with('translations','children')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $item = MenuItem::create($request->only(['menu_id','parent_id','type','link','sort_order','active']));
+        return response()->json($item,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(MenuItem $menuItem)
+    public function update(Request $request,$id)
     {
-        //
+        $item = MenuItem::findOrFail($id);
+        $item->update($request->only(['type','link','sort_order','active']));
+        return response()->json($item);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MenuItem $menuItem)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, MenuItem $menuItem)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(MenuItem $menuItem)
-    {
-        //
+        MenuItem::destroy($id);
+        return response()->json(['message'=>'Menu item deleted']);
     }
 }

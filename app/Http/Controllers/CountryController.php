@@ -7,59 +7,32 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Country::with('translations')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        return Country::with('translations','products')->findOrFail($id);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $country = Country::create($request->only(['code','active']));
+        return response()->json($country,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Country $country)
+    public function update(Request $request,$id)
     {
-        //
+        $country = Country::findOrFail($id);
+        $country->update($request->only(['code','active']));
+        return response()->json($country);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Country $country)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Country $country)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Country $country)
-    {
-        //
+        Country::destroy($id);
+        return response()->json(['message'=>'Country deleted']);
     }
 }

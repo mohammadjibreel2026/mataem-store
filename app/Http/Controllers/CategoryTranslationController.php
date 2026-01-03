@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class CategoryTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return CategoryTranslation::with('category')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = CategoryTranslation::create($request->only(['category_id','locale','name','description']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CategoryTranslation $categoryTranslation)
+    public function update(Request $request,$id)
     {
-        //
+        $translation = CategoryTranslation::findOrFail($id);
+        $translation->update($request->only(['name','description']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CategoryTranslation $categoryTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CategoryTranslation $categoryTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CategoryTranslation $categoryTranslation)
-    {
-        //
+        CategoryTranslation::destroy($id);
+        return response()->json(['message'=>'Category translation deleted']);
     }
 }

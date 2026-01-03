@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class OfferTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return OfferTranslation::with('offer')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = OfferTranslation::create($request->only(['offer_id','locale','title','description']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(OfferTranslation $offerTranslation)
+    public function update(Request $request,$id)
     {
-        //
+        $translation = OfferTranslation::findOrFail($id);
+        $translation->update($request->only(['title','description']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(OfferTranslation $offerTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, OfferTranslation $offerTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(OfferTranslation $offerTranslation)
-    {
-        //
+        OfferTranslation::destroy($id);
+        return response()->json(['message'=>'Offer translation deleted']);
     }
 }

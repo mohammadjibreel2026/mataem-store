@@ -3,63 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\BrandTranslation;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Brand::with('translations','products')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        return Brand::with('translations','products')->findOrFail($id);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $brand = Brand::create($request->only(['slug','logo','active']));
+        if($request->translations){
+            foreach($request->translations as $locale=>$data){
+                BrandTranslation::create([
+                    'brand_id'=>$brand->id,
+                    'locale'=>$locale,
+                    'name'=>$data['name']
+                ]);
+            }
+        }
+        return response()->json($brand,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Brand $brand)
+    public function update(Request $request, $id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+        $brand->update($request->only(['slug','logo','active']));
+        return response()->json($brand);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Brand $brand)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Brand $brand)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Brand $brand)
-    {
-        //
+        Brand::destroy($id);
+        return response()->json(['message'=>'Brand deleted']);
     }
 }

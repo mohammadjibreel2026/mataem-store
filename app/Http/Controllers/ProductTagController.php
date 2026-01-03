@@ -7,59 +7,20 @@ use Illuminate\Http\Request;
 
 class ProductTagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ProductTag::with(['product','tag'])->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $pt = ProductTag::firstOrCreate($request->only(['product_id','tag_id']));
+        return response()->json($pt,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductTag $productTag)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductTag $productTag)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductTag $productTag)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ProductTag $productTag)
-    {
-        //
+        ProductTag::destroy($id);
+        return response()->json(['message'=>'Product tag removed']);
     }
 }

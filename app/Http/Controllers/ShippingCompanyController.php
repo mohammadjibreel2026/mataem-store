@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class ShippingCompanyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ShippingCompany::with('shipments')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $company = ShippingCompany::create($request->only(['name','active']));
+        return response()->json($company,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ShippingCompany $shippingCompany)
+    public function update(Request $request,$id)
     {
-        //
+        $company = ShippingCompany::findOrFail($id);
+        $company->update($request->only(['name','active']));
+        return response()->json($company);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ShippingCompany $shippingCompany)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ShippingCompany $shippingCompany)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ShippingCompany $shippingCompany)
-    {
-        //
+        ShippingCompany::destroy($id);
+        return response()->json(['message'=>'Shipping company deleted']);
     }
 }

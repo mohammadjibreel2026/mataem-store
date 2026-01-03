@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class ProductTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ProductTranslation::with('product')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = ProductTranslation::create($request->only(['product_id','locale','name','description']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductTranslation $productTranslation)
+    public function update(Request $request,$id)
     {
-        //
+        $translation = ProductTranslation::findOrFail($id);
+        $translation->update($request->only(['name','description']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductTranslation $productTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductTranslation $productTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ProductTranslation $productTranslation)
-    {
-        //
+        ProductTranslation::destroy($id);
+        return response()->json(['message'=>'Product translation deleted']);
     }
 }

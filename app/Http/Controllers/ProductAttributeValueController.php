@@ -7,59 +7,20 @@ use Illuminate\Http\Request;
 
 class ProductAttributeValueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ProductAttributeValue::with(['product','attribute'])->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $value = ProductAttributeValue::create($request->only(['product_id','attribute_id','value']));
+        return response()->json($value,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductAttributeValue $productAttributeValue)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductAttributeValue $productAttributeValue)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductAttributeValue $productAttributeValue)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ProductAttributeValue $productAttributeValue)
-    {
-        //
+        ProductAttributeValue::destroy($id);
+        return response()->json(['message'=>'Attribute value deleted']);
     }
 }

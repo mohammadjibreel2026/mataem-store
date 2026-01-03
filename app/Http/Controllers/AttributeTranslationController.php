@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class AttributeTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return AttributeTranslation::with('attribute')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = AttributeTranslation::create($request->only(['attribute_id','locale','name']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(AttributeTranslation $attributeTranslation)
+    public function update(Request $request, $id)
     {
-        //
+        $translation = AttributeTranslation::findOrFail($id);
+        $translation->update($request->only(['locale','name']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AttributeTranslation $attributeTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AttributeTranslation $attributeTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AttributeTranslation $attributeTranslation)
-    {
-        //
+        AttributeTranslation::destroy($id);
+        return response()->json(['message'=>'Translation deleted']);
     }
 }

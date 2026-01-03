@@ -5,19 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class WishlistItem extends Model
+class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['wishlist_id','product_id'];
+    protected $fillable = ['user_id'];
 
-    public function wishlist()
+    public function items()
     {
-        return $this->belongsTo(Wishlist::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(WishlistItem::class);
     }
 }

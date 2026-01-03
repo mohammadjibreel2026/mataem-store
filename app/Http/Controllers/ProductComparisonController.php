@@ -7,59 +7,20 @@ use Illuminate\Http\Request;
 
 class ProductComparisonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ProductComparison::with(['user','product1','product2'])->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $comp = ProductComparison::create($request->only(['user_id','product_id_1','product_id_2']));
+        return response()->json($comp,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductComparison $productComparison)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductComparison $productComparison)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductComparison $productComparison)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ProductComparison $productComparison)
-    {
-        //
+        ProductComparison::destroy($id);
+        return response()->json(['message'=>'Comparison deleted']);
     }
 }

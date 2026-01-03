@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class CountryTranslationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return CountryTranslation::with('country')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $translation = CountryTranslation::create($request->only(['country_id','locale','name']));
+        return response()->json($translation,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CountryTranslation $countryTranslation)
+    public function update(Request $request,$id)
     {
-        //
+        $translation = CountryTranslation::findOrFail($id);
+        $translation->update($request->only(['name']));
+        return response()->json($translation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CountryTranslation $countryTranslation)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CountryTranslation $countryTranslation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CountryTranslation $countryTranslation)
-    {
-        //
+        CountryTranslation::destroy($id);
+        return response()->json(['message'=>'Translation deleted']);
     }
 }

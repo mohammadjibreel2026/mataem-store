@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class ReturnRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return ReturnRequest::with('order','user','items')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $rr = ReturnRequest::create($request->only(['order_id','user_id','reason','status']));
+        return response()->json($rr,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ReturnRequest $returnRequest)
+    public function update(Request $request,$id)
     {
-        //
+        $rr = ReturnRequest::findOrFail($id);
+        $rr->update($request->only(['status']));
+        return response()->json($rr);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ReturnRequest $returnRequest)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ReturnRequest $returnRequest)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ReturnRequest $returnRequest)
-    {
-        //
+        ReturnRequest::destroy($id);
+        return response()->json(['message'=>'Return request deleted']);
     }
 }

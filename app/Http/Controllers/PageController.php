@@ -7,59 +7,36 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Page::with('translations')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $page = Page::create($request->only(['slug','active']));
+        if($request->translations){
+            foreach($request->translations as $locale=>$data){
+                $page->translations()->create([
+                    'locale'=>$locale,
+                    'title'=>$data['title'],
+                    'content'=>$data['content'] ?? null
+                ]);
+            }
+        }
+        return response()->json($page,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Page $page)
+    public function update(Request $request,$id)
     {
-        //
+        $page = Page::findOrFail($id);
+        $page->update($request->only(['slug','active']));
+        return response()->json($page);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Page $page)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Page $page)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Page $page)
-    {
-        //
+        Page::destroy($id);
+        return response()->json(['message'=>'Page deleted']);
     }
 }

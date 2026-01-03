@@ -7,59 +7,27 @@ use Illuminate\Http\Request;
 
 class CourierApplicationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return CourierApplication::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $app = CourierApplication::create($request->only(['name','phone','city','vehicle_type','status']));
+        return response()->json($app,201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CourierApplication $courierApplication)
+    public function update(Request $request,$id)
     {
-        //
+        $app = CourierApplication::findOrFail($id);
+        $app->update($request->only(['status']));
+        return response()->json($app);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CourierApplication $courierApplication)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CourierApplication $courierApplication)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CourierApplication $courierApplication)
-    {
-        //
+        CourierApplication::destroy($id);
+        return response()->json(['message'=>'Application deleted']);
     }
 }
